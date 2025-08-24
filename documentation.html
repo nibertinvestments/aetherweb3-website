@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - AetherWeb3 Multi-EVM Gateway</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #333;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff0000;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #ff0000;
+        }
+
+        .nav-links a.active {
+            color: #ff0000;
+        }
+
+        /* Main Content */
+        .docs-main {
+            padding: 120px 0 80px;
+            min-height: 100vh;
+        }
+
+        .docs-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .docs-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #ff0000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .docs-header p {
+            font-size: 1.3rem;
+            color: #cccccc;
+        }
+
+        /* Documentation Grid */
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .docs-section {
+            background: linear-gradient(135deg, #1a1a1a, #222222);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .docs-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 0, 0, 0.1);
+        }
+
+        .docs-section h2 {
+            color: #ff0000;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .docs-section h2 i {
+            font-size: 1.5rem;
+        }
+
+        .docs-section h3 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            font-size: 1.3rem;
+        }
+
+        .docs-section h3:first-of-type {
+            margin-top: 0;
+        }
+
+        .docs-section p {
+            color: #cccccc;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .docs-section ul {
+            color: #cccccc;
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .docs-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .docs-section li strong {
+            color: #ff0000;
+        }
+
+        .docs-section pre {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .docs-section code {
+            color: #ff6b6b;
+            font-family: 'Courier New', monospace;
+        }
+
+        .network-info {
+            background: #0a0a0a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #ff0000;
+        }
+
+        .network-info h4 {
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+            color: #ffffff;
+            font-size: 1.2rem;
+        }
+
+        .network-info p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .network-info code {
+            background: #1a1a1a;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #cc0000, #990000);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid #ff0000;
+        }
+
+        .btn-secondary:hover {
+            background: #ff0000;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: #000000;
+            padding: 2rem 0 1rem;
+            border-top: 1px solid #333;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .footer-content a {
+            color: #ff0000;
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .docs-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .docs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-section {
+                padding: 1.5rem;
+            }
+
+            .docs-section pre {
+                font-size: 0.8rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <i class="fas fa-cube"></i>
+                AetherWeb3
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html#features">Features</a></li>
+                <li><a href="index.html#pricing">Pricing</a></li>
+                <li><a href="documentation.html" class="active">Docs</a></li>
+                <li><a href="mailto:sales@nibertinvestments.com">Sales</a></li>
+                <li><a href="mailto:support@nibertinvestments.com">Support</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Documentation Content -->
+    <main class="docs-main">
+        <div class="container">
+            <div class="docs-header">
+                <h1>Developer Documentation</h1>
+                <p>Everything you need to integrate with AetherWeb3 Multi-EVM Gateway</p>
+            </div>
+            
+            <div class="docs-grid">
+                <!-- Quick Start -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-rocket"></i> Quick Start</h2>
+                    
+                    <h3>1. Get Your API Key</h3>
+                    <p>Sign up for a free account to receive your API key instantly. No credit card required for the free tier.</p>
+                    <a href="index.html" class="btn btn-primary">Sign Up Free</a>
+                    
+                    <h3>2. Make Your First Request</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>curl -X POST https://api.aetherweb3.xyz/api/v1/ethereum \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "eth_getBalance",
+    "params": ["0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5", "latest"],
+    "id": 1
+  }'</code></pre>
+                    
+                    <h3>3. Handle the Response</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "0x1b1ae4d6e2ef500000"
+}</code></pre>
+                </div>
+
+                <!-- Supported Networks -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-network-wired"></i> Supported Networks</h2>
+                    
+                    <div class="network-info">
+                        <h4>Ethereum Mainnet</h4>
+                        <p><strong>Endpoint:</strong> <code>/api/v1/ethereum</code></p>
+                        <p><strong>WebSocket:</strong> <code>/ws/v1/ethereum</code></p>
+                        <p><strong>Chain ID:</strong> 1</p>
+                        <p><strong>Currency:</strong> ETH</p>
+                    </div>
+                    
+                    <div class="network-info">
+                        <h4>Base Network</h4>
+                        <p><strong>Endpoint:</strong> <code>/api/v1/base</code></p>
+                        <p><strong>WebSocket:</strong> <code>/ws/v1/base</code></p>
+                        <p><strong>Chain ID:</strong> 8453</p>
+                        <p><strong>Currency:</strong> ETH</p>
+                    </div>
+                    
+                    <div class="network-info">
+                        <h4>Arbitrum One</h4>
+                        <p><strong>Endpoint:</strong> <code>/api/v1/arbitrum</code></p>
+                        <p><strong>WebSocket:</strong> <code>/ws/v1/arbitrum</code></p>
+                        <p><strong>Chain ID:</strong> 42161</p>
+                        <p><strong>Currency:</strong> ETH</p>
+                    </div>
+                </div>
+
+                <!-- Authentication -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-key"></i> Authentication</h2>
+                    
+                    <h3>API Key Authentication</h3>
+                    <p>Include your API key in the Authorization header:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+                    
+                    <h3>Rate Limits</h3>
+                    <ul>
+                        <li><strong>Free Tier:</strong> 20 requests/minute, 120,000/day</li>
+                        <li><strong>Starter Plan:</strong> 60 requests/minute, 25M/month</li>
+                        <li><strong>Pro Plan:</strong> 200 requests/minute, 200M/month</li>
+                        <li><strong>Overage:</strong> $0.02 per additional call</li>
+                    </ul>
+                    
+                    <h3>Error Responses</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>{
+  "error": {
+    "code": 401,
+    "message": "Invalid API key"
+  }
+}</code></pre>
+                </div>
+
+                <!-- WebSocket Connections -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-bolt"></i> WebSocket Streaming</h2>
+                    
+                    <h3>Real-time Data Streaming</h3>
+                    <p>Connect to our WebSocket endpoints for real-time blockchain data:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const ws = new WebSocket('wss://api.aetherweb3.xyz/ws/v1/ethereum?auth=YOUR_API_KEY');
+
+ws.onopen = function() {
+  // Subscribe to new blocks
+  ws.send(JSON.stringify({
+    "jsonrpc": "2.0",
+    "method": "eth_subscribe",
+    "params": ["newHeads"],
+    "id": 1
+  }));
+};
+
+ws.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+  console.log('New block:', data);
+};</code></pre>
+                    
+                    <h3>Streaming Pricing</h3>
+                    <ul>
+                        <li><strong>Rate:</strong> $0.35 per minute</li>
+                        <li><strong>Minimum:</strong> 3x regular usage rate</li>
+                        <li><strong>All networks supported</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Common Methods -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-code"></i> Common RPC Methods</h2>
+                    
+                    <h3>Account Balance</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>{
+  "jsonrpc": "2.0",
+  "method": "eth_getBalance",
+  "params": ["0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5", "latest"],
+  "id": 1
+}</code></pre>
+                    
+                    <h3>Transaction Count</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>{
+  "jsonrpc": "2.0",
+  "method": "eth_getTransactionCount",
+  "params": ["0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5", "latest"],
+  "id": 1
+}</code></pre>
+                    
+                    <h3>Send Transaction</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>{
+  "jsonrpc": "2.0",
+  "method": "eth_sendRawTransaction",
+  "params": ["0xf86c098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008025a028ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276a067cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83"],
+  "id": 1
+}</code></pre>
+                </div>
+
+                <!-- Advanced Features -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-cogs"></i> Advanced Features</h2>
+                    
+                    <h3>Batch Requests</h3>
+                    <p>Send multiple RPC calls in a single request to reduce latency:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>[
+  {
+    "jsonrpc": "2.0",
+    "method": "eth_getBalance",
+    "params": ["0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5", "latest"],
+    "id": 1
+  },
+  {
+    "jsonrpc": "2.0", 
+    "method": "eth_getTransactionCount",
+    "params": ["0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5", "latest"],
+    "id": 2
+  }
+]</code></pre>
+                    
+                    <h3>Server-Sent Events</h3>
+                    <p>Stream blockchain data with Server-Sent Events for web applications:</p>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const eventSource = new EventSource('https://api.aetherweb3.xyz/api/v1/stream/ethereum?auth=YOUR_API_KEY');
+
+eventSource.onmessage = function(event) {
+  const blockData = JSON.parse(event.data);
+  console.log('New block:', blockData);
+};
+
+eventSource.onerror = function(event) {
+  console.error('Connection error:', event);
+};</code></pre>
+                </div>
+
+                <!-- Performance & Reliability -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-chart-line"></i> Performance & Reliability</h2>
+                    
+                    <h3>Enterprise Infrastructure</h3>
+                    <ul>
+                        <li><strong>99.9% Uptime SLA</strong> - Redundant infrastructure across multiple regions</li>
+                        <li><strong>Sub-100ms Response Times</strong> - Optimized for high-frequency trading and DeFi</li>
+                        <li><strong>Global CDN</strong> - Edge locations worldwide for minimal latency</li>
+                        <li><strong>Auto-scaling</strong> - Handles traffic spikes seamlessly</li>
+                        <li><strong>Load Balancing</strong> - Distributed across multiple nodes</li>
+                    </ul>
+                    
+                    <h3>Security Features</h3>
+                    <ul>
+                        <li><strong>DDoS Protection</strong> - Advanced traffic filtering and rate limiting</li>
+                        <li><strong>API Key Management</strong> - Rotation and access control</li>
+                        <li><strong>Request Validation</strong> - Input sanitization and validation</li>
+                        <li><strong>SSL/TLS Encryption</strong> - All traffic encrypted in transit</li>
+                        <li><strong>SOC 2 Compliance</strong> - Enterprise-grade security standards</li>
+                    </ul>
+                </div>
+
+                <!-- SDK & Libraries -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-tools"></i> SDKs & Libraries</h2>
+                    
+                    <h3>JavaScript/Node.js</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const { AetherWeb3 } = require('@aetherweb3/sdk');
+
+const client = new AetherWeb3({
+  apiKey: 'YOUR_API_KEY',
+  network: 'ethereum'
+});
+
+const balance = await client.getBalance('0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5');</code></pre>
+                    
+                    <h3>Python</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>from aetherweb3 import AetherWeb3
+
+client = AetherWeb3(
+    api_key='YOUR_API_KEY',
+    network='ethereum'
+)
+
+balance = client.get_balance('0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5')</code></pre>
+                    
+                    <h3>Web3.js Integration</h3>
+                    <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>const Web3 = require('web3');
+
+const web3 = new Web3(new Web3.providers.HttpProvider(
+  'https://api.aetherweb3.xyz/api/v1/ethereum',
+  {
+    headers: {
+      'Authorization': 'Bearer YOUR_API_KEY'
+    }
+  }
+));</code></pre>
+                </div>
+
+                <!-- Support & Resources -->
+                <div class="docs-section">
+                    <h2><i class="fas fa-question-circle"></i> Support & Resources</h2>
+                    
+                    <h3>Getting Help</h3>
+                    <ul>
+                        <li><strong>Technical Support:</strong> <a href="mailto:support@nibertinvestments.com">support@nibertinvestments.com</a></li>
+                        <li><strong>Sales Inquiries:</strong> <a href="mailto:sales@nibertinvestments.com">sales@nibertinvestments.com</a></li>
+                        <li><strong>Response Time:</strong> &lt; 24 hours for all support requests</li>
+                        <li><strong>Priority Support:</strong> Available for Starter and Pro plans</li>
+                    </ul>
+                    
+                    <h3>Enterprise Solutions</h3>
+                    <p>Need custom solutions, dedicated infrastructure, or higher rate limits? Our enterprise team can help:</p>
+                    <ul>
+                        <li>Dedicated nodes and infrastructure</li>
+                        <li>Custom rate limits and SLAs</li>
+                        <li>White-label solutions</li>
+                        <li>24/7 phone support</li>
+                        <li>Custom integration assistance</li>
+                    </ul>
+                    <a href="mailto:sales@nibertinvestments.com" class="btn btn-primary">Contact Enterprise Sales</a>
+                    
+                    <h3>Status & Monitoring</h3>
+                    <ul>
+                        <li><strong>Service Status:</strong> Real-time service status monitoring</li>
+                        <li><strong>Incident Reports:</strong> Transparent incident communication</li>
+                        <li><strong>Maintenance Windows:</strong> Scheduled maintenance notifications</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>aetherweb3.xyz brought to you by <a href="mailto:sales@nibertinvestments.com">Nibert Investments LLC</a></p>
+                <p>&copy; 2025 Nibert Investments LLC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function copyCode(button) {
+            const pre = button.parentElement;
+            const code = pre.querySelector('code');
+            const text = code.textContent;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.style.background = '#ff0000';
+                }, 2000);
+            }).catch(function(err) {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.98)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
