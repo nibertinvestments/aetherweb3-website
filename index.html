@@ -683,7 +683,7 @@
             </div>
             <div class="dashboard-card">
                 <h4>Quick Start</h4>
-                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/api/rpc \
+                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://api.aetherweb3.xyz/api/rpc \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -772,8 +772,20 @@
     <script src="https://js.stripe.com/v3/"></script>
     
     <script>
-        // Configuration
-        const API_BASE_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
+        // Smart API URL detection - will use custom domain when available
+        function getApiBaseUrl() {
+            const hostname = window.location.hostname;
+            
+            // If we're on the custom domain, use the API subdomain
+            if (hostname === 'aetherweb3.xyz' || hostname === 'www.aetherweb3.xyz') {
+                return 'https://api.aetherweb3.xyz';
+            }
+            
+            // Otherwise use the direct Cloud Run endpoint
+            return 'https://multi-evm-gateway-197221342816.us-central1.run.app';
+        }
+        
+        const API_BASE_URL = getApiBaseUrl();
         
         // Initialize Stripe with live key
         const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW');
@@ -1118,6 +1130,9 @@
                 header.style.background = 'rgba(0, 0, 0, 0.95)';
             }
         });
+
+        // Log the API URL being used (for debugging)
+        console.log('API Base URL:', API_BASE_URL);
     </script>
 </body>
 </html>
