@@ -683,7 +683,7 @@
             </div>
             <div class="dashboard-card">
                 <h4>Quick Start</h4>
-                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://aetherweb3.com/api/rpc \
+                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/api/rpc \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -772,8 +772,11 @@
     <script src="https://js.stripe.com/v3/"></script>
     
     <script>
-        // Initialize Stripe
-        const stripe = Stripe('pk_test_your_stripe_public_key_here'); // Replace with your actual Stripe public key
+        // Configuration
+        const API_BASE_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
+        
+        // Initialize Stripe with live key
+        const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW');
         const elements = stripe.elements();
 
         // Create an instance of the card Element
@@ -941,22 +944,24 @@
             submitBtn.disabled = true;
 
             try {
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // For demo purposes, accept any email/password combo
-                const userData = {
-                    email: email,
-                    plan: 'Free',
-                    apiKey: 'aether_' + Math.random().toString(36).substr(2, 9),
-                    todayCalls: Math.floor(Math.random() * 1000),
-                    remainingCalls: '119,000'
-                };
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed');
+                }
 
                 // Store user data
-                localStorage.setItem('authToken', 'demo_token_' + Date.now());
-                localStorage.setItem('userData', JSON.stringify(userData));
-                currentUser = userData;
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userData', JSON.stringify(data.user));
+                currentUser = data.user;
 
                 showFormSuccess('loginFormSuccess', 'Login successful! Redirecting...');
                 
@@ -965,7 +970,7 @@
                 }, 1000);
 
             } catch (error) {
-                showFormError('loginFormError', 'Login failed. Please try again.');
+                showFormError('loginFormError', error.message || 'Login failed. Please try again.');
             } finally {
                 submitBtn.innerHTML = 'Login';
                 submitBtn.disabled = false;
@@ -1017,21 +1022,29 @@
                     paymentMethodId = token.id;
                 }
 
-                // Simulate API call
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                const userData = {
-                    email: email,
-                    plan: plan === 'starter' ? 'Starter' : 'Free',
-                    apiKey: 'aether_' + Math.random().toString(36).substr(2, 9),
-                    todayCalls: 0,
-                    remainingCalls: plan === 'starter' ? 'Unlimited' : '120,000'
-                };
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        email, 
+                        password, 
+                        plan,
+                        paymentMethodId 
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Registration failed');
+                }
 
                 // Store user data
-                localStorage.setItem('authToken', 'demo_token_' + Date.now());
-                localStorage.setItem('userData', JSON.stringify(userData));
-                currentUser = userData;
+                localStorage.setItem('authToken', data.token);
+                localStorage.setItem('userData', JSON.stringify(data.user));
+                currentUser = data.user;
 
                 showFormSuccess('signupFormSuccess', 'Account created successfully! Redirecting...');
                 
