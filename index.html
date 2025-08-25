@@ -497,29 +497,6 @@
         .hidden {
             display: none !important;
         }
-
-        /* Footer */
-        footer {
-            background: #000000;
-            padding: 2rem 0 1rem;
-            border-top: 1px solid #333;
-            margin-top: 4rem;
-        }
-
-        .footer-content {
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .footer-content a {
-            color: #ff0000;
-            text-decoration: none;
-        }
-
-        .footer-content a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -533,9 +510,8 @@
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
                 <li><a href="#pricing">Pricing</a></li>
-                <li><a href="documentation.html">Docs</a></li>
-                <li><a href="mailto:sales@nibertinvestments.com">Sales</a></li>
-                <li><a href="mailto:support@nibertinvestments.com">Support</a></li>
+                <li><a href="#documentation">Docs</a></li>
+                <li><a href="#support">Support</a></li>
             </ul>
             <div class="auth-buttons">
                 <a href="#" class="btn btn-secondary" id="loginBtn">Login</a>
@@ -554,7 +530,7 @@
                     <p>Connect to Ethereum, Base, and Arbitrum networks with enterprise-grade reliability and lightning-fast response times.</p>
                     <div class="auth-buttons">
                         <a href="#" class="btn btn-primary" id="heroSignupBtn">Start Building</a>
-                        <a href="documentation.html" class="btn btn-secondary">View Documentation</a>
+                        <a href="#" class="btn btn-secondary">View Documentation</a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat">
@@ -707,14 +683,13 @@
             </div>
             <div class="dashboard-card">
                 <h4>Quick Start</h4>
-                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://api.aetherweb3.xyz/api/v1/ethereum \
+                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/api/rpc \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
-    "jsonrpc": "2.0",
+    "network": "ethereum",
     "method": "eth_getBalance",
-    "params": ["0x...", "latest"],
-    "id": 1
+    "params": ["0x...", "latest"]
   }'</code></pre>
             </div>
         </div>
@@ -793,34 +768,24 @@
         </p>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p>aetherweb3.xyz brought to you by <a href="mailto:sales@nibertinvestments.com">Nibert Investments LLC</a></p>
-                <p>&copy; 2025 Nibert Investments LLC. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
     <!-- Stripe JS -->
     <script src="https://js.stripe.com/v3/"></script>
     
     <script>
-        // API Configuration with smart domain detection
-        function getAPIBaseURL() {
-            const hostname = window.location.hostname;
-            if (hostname === 'aetherweb3.xyz' || hostname === 'www.aetherweb3.xyz') {
-                return 'https://api.aetherweb3.xyz';
-            }
-            // Fallback to Cloud Run URL for GitHub Pages and development
+        // API Configuration
+        function getPaymentServerURL() {
+            return 'https://aetherweb3-payment-server-197221342816.us-central1.run.app';
+        }
+        
+        function getGatewayURL() {
             return 'https://multi-evm-gateway-197221342816.us-central1.run.app';
         }
         
-        const API_BASE_URL = getAPIBaseURL();
+        const PAYMENT_API_URL = getPaymentServerURL();
+        const GATEWAY_API_URL = getGatewayURL();
         
         // Initialize Stripe
-        const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW');
+        const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW'); // Your live Stripe key
         const elements = stripe.elements();
 
         // Create an instance of the card Element
@@ -988,7 +953,8 @@
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                // Make actual API call to your backend
+                const response = await fetch(`${PAYMENT_API_URL}/api/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1069,7 +1035,8 @@
                     paymentMethodId = token.id;
                 }
 
-                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                // Make actual API call to your backend
+                const response = await fetch(`${PAYMENT_API_URL}/auth/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
