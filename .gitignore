@@ -34,20 +34,3 @@ build/
 
 # Logs
 *.log
-
-# Database Files
-*.db
-*.sqlite
-
-# Temporary Files
-*.tmp
-*.temp
-
-# Certificate Files
-certificates/
-*.pem
-*.key
-*.crt
-
-# Secret Files
-stripe-cli
