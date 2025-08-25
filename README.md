@@ -1,173 +1,164 @@
-# AetherWeb3 Website
+# AetherWeb3 - Multi-EVM Gateway Infrastructure
 
-🚀 **Professional multi-EVM gateway website with Infura.io-inspired design**
+## Overview
 
-## 🌟 Features
+AetherWeb3 is a comprehensive blockchain infrastructure project providing high-performance RPC and WebSocket API endpoints for multiple EVM-compatible networks including Ethereum, Base, and Arbitrum.
 
-### 🎨 Modern Design
-- **Infura.io-inspired** professional interface
-- **White/Black/Red** color scheme with corporate branding
-- **Responsive design** that works on all devices
-- **Smooth animations** and hover effects
-- **Corporate images** integrated from cloud storage
+## 🚀 Live Website
 
-### 🔐 Complete Authentication System
-- **User registration** with email/password
-- **Secure login** functionality
-- **Session persistence** with localStorage
-- **Dashboard** with API key management
-- **User profile** management
+**Website**: [https://aetherweb3.xyz](https://aetherweb3.xyz)
 
-### 💳 Stripe Payment Integration
-- **Credit card collection** for paid plans
-- **Secure payment processing** with Stripe Elements
-- **Plan selection** (Free vs Starter)
-- **Payment method validation**
-- **Subscription management**
+## 🏗️ Architecture
 
-### 📊 User Dashboard
-- **API usage tracking** and analytics
-- **Real-time statistics** display
-- **API key generation** and management
-- **Quick start** code examples
-- **Usage monitoring** and limits
+### Core Components
 
-### 🚀 Pricing Structure
-- **Free Tier:** $0/month, 120K calls/day, 20 calls/min
-- **Starter Tier:** $9.99/month + $0.001/call, 60 calls/min
-- **Transparent pricing** with clear feature comparison
-- **Scalable billing** model
+1. **Multi-EVM Gateway** (`/multi-evm-gateway/`)
+   - High-performance API gateway
+   - Load balancing across multiple nodes
+   - Rate limiting and authentication
+   - Real-time monitoring and analytics
 
-## 🛠️ Technology Stack
+2. **Node Infrastructure** (Root deployment scripts)
+   - Ethereum nodes (Geth)
+   - Base nodes (op-geth)
+   - Arbitrum nodes (Nitro)
+   - Auto-pruning and optimization
 
-- **Frontend:** Pure HTML5, CSS3, JavaScript (ES6+)
-- **Styling:** Custom CSS with gradients, animations, and responsive design
-- **Payment:** Stripe Elements for secure card processing
-- **Icons:** Font Awesome 6.0
-- **Storage:** localStorage for session management
-- **Images:** Google Cloud Storage integration
+3. **Website & Payment System** (`/multi-evm-gateway/website/`)
+   - Professional landing page
+   - Stripe payment integration
+   - API key management dashboard
+   - Comprehensive documentation
 
-## 🎯 Multi-EVM Gateway Features
+## 📊 Pricing Tiers
 
-### 🌐 Network Support
-- **Ethereum** mainnet access
-- **Base** network integration
-- **Arbitrum** One support
-- **Unified API** endpoint for all networks
+| Tier | Requests/Day | Price | Features |
+|------|-------------|-------|----------|
+| **Free** | 120,000 | $0 | Basic access, community support |
+| **Starter** | 1,000,000 | $29/month | Priority support, higher limits |
+| **Pro** | 10,000,000 | $99/month | Advanced features, dedicated support |
+| **Streaming** | Unlimited | $299/month | WebSocket access, custom solutions |
 
-### ⚡ Performance
-- **Sub-100ms** response times
-- **HTTP/2** and WebSocket support
-- **99.9% uptime** guarantee
-- **Enterprise-grade** infrastructure
-- **600 calls/minute** sustained capacity
-
-### 🔒 Security Features
-- **API key authentication**
-- **Rate limiting** protection
-- **DDoS protection**
-- **Secure HTTPS** endpoints
-- **Request validation**
-
-## 🚀 Quick Start
+## 🛠️ Quick Start
 
 ### For Users
-1. Visit the website
-2. Click "Get Started" to create an account
-3. Choose your plan (Free or Starter)
-4. Get your API key from the dashboard
-5. Start making API calls
+1. Visit [aetherweb3.xyz](https://aetherweb3.xyz)
+2. Choose your plan
+3. Get your API key instantly
+4. Start making requests
 
-### Example API Call
+### For Developers
 ```bash
-curl -X POST https://aetherweb3.com/api/rpc \
-  -H "Authorization: Bearer YOUR_API_KEY" \
+# Example API call
+curl -X POST https://multi-evm-gateway-994206105149.us-central1.run.app/ethereum \
   -H "Content-Type: application/json" \
-  -d '{
-    "network": "ethereum",
-    "method": "eth_getBalance",
-    "params": ["0x...", "latest"]
-  }'
+  -H "x-api-key: YOUR_API_KEY" \
+  -d '{"method":"eth_blockNumber","params":[],"id":1,"jsonrpc":"2.0"}'
 ```
 
-## 🎨 Design Elements
+## 🔧 Infrastructure Deployment
 
-### Color Scheme
-- **Primary:** #ff0000 (Red)
-- **Background:** Linear gradients from #000000 to #1a1a1a
-- **Text:** #ffffff (White)
-- **Secondary:** #cccccc (Light Gray)
-- **Cards:** #1a1a1a to #222222 gradients
+### Prerequisites
+- Google Cloud Platform account
+- PowerShell 5.1+
+- gcloud CLI
 
-### Typography
-- **Font Family:** 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
-- **Headings:** Bold weights with gradient text effects
-- **Body:** Clean, readable font sizes with proper line spacing
+### Deploy Complete Infrastructure
+```powershell
+# Deploy all EVM nodes
+.\deploy-evm-infrastructure.ps1
 
-### Components
-- **Navigation:** Fixed header with blur effect
-- **Hero Section:** Large typography with statistics
-- **Feature Cards:** Hover effects with red accent borders
-- **Pricing Cards:** Featured plan highlighting
-- **Forms:** Modern input styling with focus states
+# Deploy gateway
+.\deploy-gateway.ps1
 
-## 🌍 Deployment
+# Setup monitoring
+.\install-ops-agent.ps1
+```
 
-This website is designed for easy deployment:
+### Individual Node Deployment
+```powershell
+# Ethereum node
+.\deploy-eth-node-vm.ps1
 
-1. **GitHub Pages** (Recommended)
-   - Free HTTPS hosting
-   - Automatic deployments
-   - Custom domain support
+# Base node
+.\deploy-base-node-vm.ps1
 
-2. **Netlify/Vercel**
-   - Advanced features
-   - Form handling
-   - Continuous deployment
+# Arbitrum node
+.\deploy-arbitrum-node-vm.ps1
+```
 
-3. **Traditional Web Hosting**
-   - Upload files to any web server
-   - No server-side requirements
+## 📁 Project Structure
 
-## 🔧 Configuration
+```
+├── 📄 Core Infrastructure Scripts
+│   ├── deploy-*.ps1              # Node deployment scripts
+│   ├── install-*.ps1              # Installation scripts
+│   └── setup-*.ps1                # Configuration scripts
+│
+├── 🏗️ multi-evm-gateway/
+│   ├── gateway/                   # API gateway application
+│   ├── website/                   # Frontend & payment system
+│   ├── scripts/                   # Deployment automation
+│   └── Dockerfile                 # Container configuration
+│
+├── 🔄 auto-pruning/
+│   ├── *-pruned.sh                # Node optimization scripts
+│   └── deploy-auto-pruning.sh     # Automated maintenance
+│
+└── 📚 Documentation
+    ├── *.md                       # Setup guides
+    └── *.md                       # Status reports
+```
 
-### Required Updates
-1. **Stripe Public Key:** Replace `pk_test_your_stripe_public_key_here` with your actual Stripe key
-2. **API Endpoint:** Update API URLs to point to your backend
-3. **Authentication:** Connect forms to your authentication system
-4. **Analytics:** Add Google Analytics or other tracking
+## 🔐 Security Features
 
-### Optional Customizations
-- Update corporate images in cloud storage
-- Modify color scheme variables
-- Add additional features or sections
-- Integrate with backend APIs
+- **API Key Authentication**: Secure access control
+- **Rate Limiting**: Prevent abuse and ensure fair usage
+- **SSL/TLS Encryption**: All traffic encrypted
+- **DDoS Protection**: Cloudflare integration
+- **Regular Security Audits**: Automated vulnerability scanning
 
-## 📱 Mobile Responsiveness
+## 📈 Performance Metrics
 
-- **Responsive grid** layouts
-- **Mobile-optimized** navigation
-- **Touch-friendly** buttons and forms
-- **Optimized images** and animations
-- **Viewport meta tag** for proper scaling
+- **99.9% Uptime**: Highly available infrastructure
+- **<100ms Response Time**: Optimized for speed
+- **Multi-Region**: Global load balancing
+- **Auto-Scaling**: Dynamic resource allocation
 
-## 🎉 Demo Features
+## 🤝 Support
 
-The website includes demo functionality:
-- **Mock authentication** (accepts any email/password)
-- **Simulated payments** (Stripe test mode)
-- **Sample API keys** generation
-- **Random usage statistics**
-- **Interactive dashboard**
+- **Documentation**: [aetherweb3.xyz/documentation](https://aetherweb3.xyz/documentation.html)
+- **API Management**: [aetherweb3.xyz/api-management](https://aetherweb3.xyz/api-management.html)
+- **Email Support**: Contact through website
 
-## 📝 License
+## 🔄 Recent Updates
 
-This project is created for AetherWeb3 and contains proprietary design elements and corporate branding.
+- ✅ Complete website redesign with professional UI
+- ✅ Stripe payment integration with live processing
+- ✅ Comprehensive API documentation
+- ✅ Real-time usage monitoring
+- ✅ Multi-tier pricing system
+- ✅ Auto-pruning for optimal node performance
 
-## 🚀 Live Demo
+## 📊 Network Support
 
-Visit: [https://nibertinvestments.github.io/aetherweb3-website/](https://nibertinvestments.github.io/aetherweb3-website/)
+| Network | Chain ID | RPC Endpoint | WebSocket |
+|---------|----------|--------------|----------|
+| **Ethereum Mainnet** | 1 | ✅ Available | ✅ Available |
+| **Base Mainnet** | 8453 | ✅ Available | ✅ Available |
+| **Arbitrum One** | 42161 | ✅ Available | ✅ Available |
+
+## 🛡️ Infrastructure Status
+
+- **Ethereum Nodes**: 🟢 Operational
+- **Base Nodes**: 🟢 Operational  
+- **Arbitrum Nodes**: 🟢 Operational
+- **Gateway Service**: 🟢 Operational
+- **Payment System**: 🟢 Operational
+- **Monitoring**: 🟢 Operational
 
 ---
 
-**Built with ❤️ for the Web3 developer community**
+**Built with ❤️ for the Web3 ecosystem**
+
+*Empowering developers with reliable, fast, and scalable blockchain infrastructure.*
