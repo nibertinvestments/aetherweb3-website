@@ -1,0 +1,37 @@
+{
+  "name": "multi-evm-gateway",
+  "version": "1.0.0",
+  "description": "Multi-chain EVM RPC Gateway with API management",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "build": "echo 'Building for production'",
+    "test": "echo 'Tests not implemented yet'"
+  },
+  "keywords": [
+    "ethereum",
+    "blockchain",
+    "rpc",
+    "gateway",
+    "multi-chain",
+    "api-management"
+  ],
+  "author": "AetherWeb3 Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "googleapis": "^128.0.0",
+    "helmet": "^7.1.0",
+    "node-fetch": "^2.7.0",
+    "stripe": "^14.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
