@@ -1,3 +1,4 @@
+```json
 {
   "name": "multi-evm-gateway",
   "version": "1.0.0",
@@ -51,10 +52,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nibertinvestments/aetherweb3-website.git"
+    "url": "git+https://github.com/yourusername/multi-evm-gateway.git"
   },
   "bugs": {
-    "url": "https://github.com/nibertinvestments/aetherweb3-website/issues"
+    "url": "https://github.com/yourusername/multi-evm-gateway/issues"
   },
-  "homepage": "https://aetherweb3.xyz"
+  "homepage": "https://github.com/yourusername/multi-evm-gateway#readme"
 }
+```
