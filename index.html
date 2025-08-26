@@ -1227,36 +1227,6 @@ eventSource.onmessage = function(event) {
             }
         }
 
-        // Event listeners
-        loginBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            showLogin();
-        });
-
-        showLoginForm.addEventListener('click', (e) => {
-            e.preventDefault();
-            showLogin();
-        });
-
-        logoutBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            logout();
-        });
-
-        // Dashboard button click handler
-        const dashboardBtn = document.getElementById('dashboardBtn');
-        if (dashboardBtn) {
-            dashboardBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (currentUser) {
-                    showDashboard();
-                } else {
-                    // Redirect to login page if not authenticated
-                    window.location.href = 'api-management.html';
-                }
-            });
-        }
-
         // Plan selection handling and form submissions are now handled by Stripe Checkout
         // Legacy form code removed for cleaner implementation
 
@@ -1350,8 +1320,12 @@ eventSource.onmessage = function(event) {
                 let paymentMethodId = null;
 
                 // Handle Stripe payment for paid plans
-                if (plan === 'starter') {
-                    const {token, error} = await stripe.createToken(cardElement);
+                if (plan === 'starter' || plan === 'pro') {
+                    if (!window.cardElement) {
+                        throw new Error('Please enter payment details');
+                    }
+                    
+                    const {token, error} = await stripe.createToken(window.cardElement);
                     
                     if (error) {
                         document.getElementById('cardErrors').textContent = error.message;
@@ -1433,6 +1407,135 @@ eventSource.onmessage = function(event) {
                 document.getElementById('signupFormSuccess').style.display = 'none';
                 document.getElementById('cardErrors').textContent = '';
             }
+        }
+
+        // Event listeners for navigation and forms
+        if (loginBtn) {
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showLogin();
+            });
+        }
+
+        if (signupBtn) {
+            signupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSignup();
+            });
+        }
+
+        if (heroSignupBtn) {
+            heroSignupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSignup();
+            });
+        }
+
+        if (showSignupForm) {
+            showSignupForm.addEventListener('click', (e) => {
+                e.preventDefault();
+                showSignup();
+            });
+        }
+
+        if (showLoginForm) {
+            showLoginForm.addEventListener('click', (e) => {
+                e.preventDefault();
+                showLogin();
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        }
+
+        // Dashboard button click handler
+        if (dashboardBtn) {
+            dashboardBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentUser) {
+                    showDashboard();
+                } else {
+                    showLogin();
+                }
+            });
+        }
+
+        // Form submissions
+        const loginFormElement = document.getElementById('loginFormElement');
+        const signupFormElement = document.getElementById('signupFormElement');
+
+        if (loginFormElement) {
+            loginFormElement.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleLogin();
+            });
+        }
+
+        if (signupFormElement) {
+            signupFormElement.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleSignup();
+            });
+        }
+
+        // Signup buttons with plan data
+        document.querySelectorAll('.signup-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const plan = btn.getAttribute('data-plan');
+                if (plan) {
+                    document.getElementById('signupPlan').value = plan;
+                }
+                showSignup();
+            });
+        });
+
+        // Plan selection change handler
+        const signupPlanSelect = document.getElementById('signupPlan');
+        if (signupPlanSelect) {
+            signupPlanSelect.addEventListener('change', function() {
+                const cardDetailsGroup = document.getElementById('cardDetailsGroup');
+                if (this.value === 'starter' || this.value === 'pro') {
+                    cardDetailsGroup.style.display = 'block';
+                    // Initialize Stripe Elements if not already done
+                    if (!window.cardElement) {
+                        const elements = stripe.elements();
+                        window.cardElement = elements.create('card', {
+                            style: {
+                                base: {
+                                    color: '#ffffff',
+                                    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+                                    fontSmoothing: 'antialiased',
+                                    fontSize: '16px',
+                                    '::placeholder': {
+                                        color: '#cccccc'
+                                    }
+                                },
+                                invalid: {
+                                    color: '#ff4444',
+                                    iconColor: '#ff4444'
+                                }
+                            }
+                        });
+                        window.cardElement.mount('#card-element');
+                        
+                        window.cardElement.addEventListener('change', function(event) {
+                            const displayError = document.getElementById('cardErrors');
+                            if (event.error) {
+                                displayError.textContent = event.error.message;
+                            } else {
+                                displayError.textContent = '';
+                            }
+                        });
+                    }
+                } else {
+                    cardDetailsGroup.style.display = 'none';
+                }
+            });
         }
 
         // Smooth scrolling for navigation links
