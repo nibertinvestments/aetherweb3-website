@@ -1102,6 +1102,11 @@ eventSource.onmessage = function(event) {
         <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">Create Account</h2>
         <form id="signupFormElement">
             <div class="form-group">
+                <label for="signupUsername">Username</label>
+                <input type="text" id="signupUsername" required>
+                <div class="error-message" id="signupUsernameError"></div>
+            </div>
+            <div class="form-group">
                 <label for="signupEmail">Email</label>
                 <input type="email" id="signupEmail" required>
                 <div class="error-message" id="signupEmailError"></div>
@@ -1157,8 +1162,8 @@ eventSource.onmessage = function(event) {
     <script src="https://js.stripe.com/v3/"></script>
     
     <script>
-        // API Configuration - use production Cloud Run endpoint for GitHub Pages
-        const API_BASE_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
+        // API Configuration - use production Cloud Run endpoint
+        const GATEWAY_API_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
         
         // Initialize Stripe
         const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW');
@@ -1231,7 +1236,7 @@ eventSource.onmessage = function(event) {
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                const response = await fetch(`${GATEWAY_API_URL}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -1259,6 +1264,7 @@ eventSource.onmessage = function(event) {
         }
 
         async function handleSignup() {
+            const username = document.getElementById('signupUsername').value;
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('signupConfirmPassword').value;
@@ -1267,7 +1273,7 @@ eventSource.onmessage = function(event) {
 
             clearFormErrors('signup');
 
-            if (!email || !password || !confirmPassword) {
+            if (!username || !email || !password || !confirmPassword) {
                 showFormError('signupFormError', 'Please fill in all fields');
                 return;
             }
@@ -1281,10 +1287,10 @@ eventSource.onmessage = function(event) {
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                const response = await fetch(`${GATEWAY_API_URL}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, username: email, plan })
+                    body: JSON.stringify({ username, email, password, plan })
                 });
 
                 const data = await response.json();
@@ -1333,7 +1339,7 @@ eventSource.onmessage = function(event) {
                 ['loginEmailError', 'loginPasswordError', 'loginFormError', 'loginFormSuccess']
                     .forEach(id => document.getElementById(id).style.display = 'none');
             } else if (formType === 'signup') {
-                ['signupEmailError', 'signupPasswordError', 'signupConfirmPasswordError', 'signupFormError', 'signupFormSuccess']
+                ['signupUsernameError', 'signupEmailError', 'signupPasswordError', 'signupConfirmPasswordError', 'signupFormError', 'signupFormSuccess']
                     .forEach(id => document.getElementById(id).style.display = 'none');
             }
         }
