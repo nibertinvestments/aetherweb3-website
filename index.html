@@ -509,6 +509,31 @@
             border-radius: 12px;
             border: 1px solid #333;
             display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-container.show {
+            display: block;
+        }
+
+        .form-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1999;
+            display: none;
+        }
+
+        .form-overlay.show {
+            display: block;
         }
 
         .form-group {
@@ -1040,8 +1065,12 @@ eventSource.onmessage = function(event) {
         </div>
     </section>
 
+    <!-- Form Overlay -->
+    <div class="form-overlay" id="formOverlay"></div>
+
     <!-- Login Form -->
     <div class="form-container" id="loginForm">
+        <button style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;" onclick="closeForms()">&times;</button>
         <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">Login</h2>
         <form id="loginFormElement">
             <div class="form-group">
@@ -1069,6 +1098,7 @@ eventSource.onmessage = function(event) {
 
     <!-- Signup Form -->
     <div class="form-container" id="signupForm">
+        <button style="position: absolute; top: 10px; right: 15px; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;" onclick="closeForms()">&times;</button>
         <h2 style="text-align: center; margin-bottom: 2rem; color: #ffffff;">Create Account</h2>
         <form id="signupFormElement">
             <div class="form-group">
@@ -1127,95 +1157,52 @@ eventSource.onmessage = function(event) {
     <script src="https://js.stripe.com/v3/"></script>
     
     <script>
-        // API Configuration with smart domain detection
-        function getAPIBaseURL() {
-            const hostname = window.location.hostname;
-            if (hostname === 'aetherweb3.xyz' || hostname === 'www.aetherweb3.xyz') {
-                return 'https://api.aetherweb3.xyz';
-            }
-            // Updated Cloud Run URL for the latest deployment
-            return 'https://multi-evm-gateway-197221342816.us-central1.run.app';
-        }
-        
-        function getPaymentServerURL() {
-            const hostname = window.location.hostname;
-            if (hostname === 'aetherweb3.xyz' || hostname === 'www.aetherweb3.xyz') {
-                return 'https://payments.aetherweb3.xyz';
-            }
-            // Use main gateway for authentication due to domain restrictions
-            return 'https://multi-evm-gateway-197221342816.us-central1.run.app';
-        }
-        
-        const API_BASE_URL = getAPIBaseURL();
-        const PAYMENT_SERVER_URL = getPaymentServerURL();
+        // API Configuration - use production Cloud Run endpoint for GitHub Pages
+        const API_BASE_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
         
         // Initialize Stripe
         const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW');
 
-        function showSignupModal() {
-            // Hide main content and show signup form
-            document.getElementById('mainContent').style.display = 'none';
-            document.getElementById('signupForm').style.display = 'block';
-        }
-
-        // Login functionality
-        // Handle form switching
-        const loginBtn = document.getElementById('loginBtn');
-        const signupBtn = document.getElementById('signupBtn');
-        const heroSignupBtn = document.getElementById('heroSignupBtn');
-        const signupBtns = document.querySelectorAll('.signup-btn');
-        const showSignupForm = document.getElementById('showSignupForm');
-        const showLoginForm = document.getElementById('showLoginForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-
-        const mainContent = document.getElementById('mainContent');
-        const dashboard = document.getElementById('dashboard');
+        // Form elements
+        const formOverlay = document.getElementById('formOverlay');
         const loginForm = document.getElementById('loginForm');
         const signupForm = document.getElementById('signupForm');
+        const mainContent = document.getElementById('mainContent');
+        const dashboard = document.getElementById('dashboard');
 
         // User state
         let currentUser = null;
 
-        // Check if user is logged in on page load
-        checkAuthState();
-
-        function checkAuthState() {
-            const token = localStorage.getItem('authToken');
-            const userData = localStorage.getItem('userData');
-            
-            if (token && userData) {
-                currentUser = JSON.parse(userData);
-                showDashboard();
-            }
-        }
-
+        // Form management functions
         function showLogin() {
-            mainContent.classList.add('hidden');
-            dashboard.classList.add('hidden');
-            signupForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
+            formOverlay.classList.add('show');
+            loginForm.classList.add('show');
+            signupForm.classList.remove('show');
         }
 
         function showSignup() {
-            mainContent.classList.add('hidden');
-            dashboard.classList.add('hidden');
-            loginForm.classList.add('hidden');
-            signupForm.classList.remove('hidden');
+            formOverlay.classList.add('show');
+            signupForm.classList.add('show');
+            loginForm.classList.remove('show');
         }
 
-        function showMain() {
-            loginForm.classList.add('hidden');
-            signupForm.classList.add('hidden');
-            dashboard.classList.add('hidden');
-            mainContent.classList.remove('hidden');
+        function closeForms() {
+            formOverlay.classList.remove('show');
+            loginForm.classList.remove('show');
+            signupForm.classList.remove('show');
         }
 
         function showDashboard() {
-            mainContent.classList.add('hidden');
-            loginForm.classList.add('hidden');
-            signupForm.classList.add('hidden');
-            dashboard.classList.remove('hidden');
+            closeForms();
+            mainContent.style.display = 'none';
+            dashboard.style.display = 'block';
             updateDashboard();
+        }
+
+        function showMain() {
+            closeForms();
+            dashboard.style.display = 'none';
+            mainContent.style.display = 'block';
         }
 
         function updateDashboard() {
@@ -1227,38 +1214,27 @@ eventSource.onmessage = function(event) {
             }
         }
 
-        // Plan selection handling and form submissions are now handled by Stripe Checkout
-        // Legacy form code removed for cleaner implementation
-
+        // Authentication functions
         async function handleLogin() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             const submitBtn = document.getElementById('loginSubmitBtn');
 
-            // Clear previous errors
             clearFormErrors('login');
 
-            // Validation
             if (!email || !password) {
                 showFormError('loginFormError', 'Please fill in all fields');
                 return;
             }
 
-            // Show loading
             submitBtn.innerHTML = '<span class="loading"></span> Logging in...';
             submitBtn.disabled = true;
 
             try {
-                // Make actual API call to your backend
-                const response = await fetch(`${PAYMENT_SERVER_URL}/auth/login`, {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
@@ -1267,19 +1243,15 @@ eventSource.onmessage = function(event) {
                     throw new Error(data.message || 'Login failed');
                 }
 
-                // Store user data
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('userData', JSON.stringify(data.user));
                 currentUser = data.user;
 
-                showFormSuccess('loginFormSuccess', 'Login successful! Redirecting...');
-                
-                setTimeout(() => {
-                    showDashboard();
-                }, 1000);
+                showFormSuccess('loginFormSuccess', 'Login successful!');
+                setTimeout(() => showDashboard(), 1000);
 
             } catch (error) {
-                showFormError('loginFormError', error.message || 'Login failed. Please try again.');
+                showFormError('loginFormError', error.message);
             } finally {
                 submitBtn.innerHTML = 'Login';
                 submitBtn.disabled = false;
@@ -1293,10 +1265,8 @@ eventSource.onmessage = function(event) {
             const plan = document.getElementById('signupPlan').value;
             const submitBtn = document.getElementById('signupSubmitBtn');
 
-            // Clear previous errors
             clearFormErrors('signup');
 
-            // Validation
             if (!email || !password || !confirmPassword) {
                 showFormError('signupFormError', 'Please fill in all fields');
                 return;
@@ -1307,46 +1277,14 @@ eventSource.onmessage = function(event) {
                 return;
             }
 
-            if (password.length < 6) {
-                showFormError('signupPasswordError', 'Password must be at least 6 characters');
-                return;
-            }
-
-            // Show loading
             submitBtn.innerHTML = '<span class="loading"></span> Creating account...';
             submitBtn.disabled = true;
 
             try {
-                let paymentMethodId = null;
-
-                // Handle Stripe payment for paid plans
-                if (plan === 'starter' || plan === 'pro') {
-                    if (!window.cardElement) {
-                        throw new Error('Please enter payment details');
-                    }
-                    
-                    const {token, error} = await stripe.createToken(window.cardElement);
-                    
-                    if (error) {
-                        document.getElementById('cardErrors').textContent = error.message;
-                        throw new Error('Card validation failed');
-                    }
-                    
-                    paymentMethodId = token.id;
-                }
-
-                // Make actual API call to your backend
-                const response = await fetch(`${PAYMENT_SERVER_URL}/auth/register`, {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        password: password,
-                        plan: plan,
-                        paymentMethodId: paymentMethodId
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, username: email, plan })
                 });
 
                 const data = await response.json();
@@ -1355,19 +1293,15 @@ eventSource.onmessage = function(event) {
                     throw new Error(data.message || 'Registration failed');
                 }
 
-                // Store user data
                 localStorage.setItem('authToken', data.token);
                 localStorage.setItem('userData', JSON.stringify(data.user));
                 currentUser = data.user;
 
-                showFormSuccess('signupFormSuccess', 'Account created successfully! Redirecting...');
-                
-                setTimeout(() => {
-                    showDashboard();
-                }, 1000);
+                showFormSuccess('signupFormSuccess', 'Account created successfully!');
+                setTimeout(() => showDashboard(), 1000);
 
             } catch (error) {
-                showFormError('signupFormError', error.message || 'Registration failed. Please try again.');
+                showFormError('signupFormError', error.message);
             } finally {
                 submitBtn.innerHTML = 'Create Account';
                 submitBtn.disabled = false;
@@ -1381,6 +1315,7 @@ eventSource.onmessage = function(event) {
             showMain();
         }
 
+        // Utility functions
         function showFormError(elementId, message) {
             const element = document.getElementById(elementId);
             element.textContent = message;
@@ -1395,66 +1330,56 @@ eventSource.onmessage = function(event) {
 
         function clearFormErrors(formType) {
             if (formType === 'login') {
-                document.getElementById('loginEmailError').style.display = 'none';
-                document.getElementById('loginPasswordError').style.display = 'none';
-                document.getElementById('loginFormError').style.display = 'none';
-                document.getElementById('loginFormSuccess').style.display = 'none';
+                ['loginEmailError', 'loginPasswordError', 'loginFormError', 'loginFormSuccess']
+                    .forEach(id => document.getElementById(id).style.display = 'none');
             } else if (formType === 'signup') {
-                document.getElementById('signupEmailError').style.display = 'none';
-                document.getElementById('signupPasswordError').style.display = 'none';
-                document.getElementById('signupConfirmPasswordError').style.display = 'none';
-                document.getElementById('signupFormError').style.display = 'none';
-                document.getElementById('signupFormSuccess').style.display = 'none';
-                document.getElementById('cardErrors').textContent = '';
+                ['signupEmailError', 'signupPasswordError', 'signupConfirmPasswordError', 'signupFormError', 'signupFormSuccess']
+                    .forEach(id => document.getElementById(id).style.display = 'none');
             }
         }
 
-        // Event listeners for navigation and forms
-        if (loginBtn) {
-            loginBtn.addEventListener('click', (e) => {
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check auth state
+            const token = localStorage.getItem('authToken');
+            const userData = localStorage.getItem('userData');
+            if (token && userData) {
+                currentUser = JSON.parse(userData);
+                showDashboard();
+            }
+
+            // Form event listeners
+            document.getElementById('loginBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 showLogin();
             });
-        }
 
-        if (signupBtn) {
-            signupBtn.addEventListener('click', (e) => {
+            document.getElementById('signupBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 showSignup();
             });
-        }
 
-        if (heroSignupBtn) {
-            heroSignupBtn.addEventListener('click', (e) => {
+            document.getElementById('heroSignupBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 showSignup();
             });
-        }
 
-        if (showSignupForm) {
-            showSignupForm.addEventListener('click', (e) => {
+            document.getElementById('showSignupForm')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 showSignup();
             });
-        }
 
-        if (showLoginForm) {
-            showLoginForm.addEventListener('click', (e) => {
+            document.getElementById('showLoginForm')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 showLogin();
             });
-        }
 
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', (e) => {
+            document.getElementById('logoutBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 logout();
             });
-        }
 
-        // Dashboard button click handler
-        if (dashboardBtn) {
-            dashboardBtn.addEventListener('click', (e) => {
+            document.getElementById('dashboardBtn')?.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (currentUser) {
                     showDashboard();
@@ -1462,81 +1387,33 @@ eventSource.onmessage = function(event) {
                     showLogin();
                 }
             });
-        }
 
-        // Form submissions
-        const loginFormElement = document.getElementById('loginFormElement');
-        const signupFormElement = document.getElementById('signupFormElement');
-
-        if (loginFormElement) {
-            loginFormElement.addEventListener('submit', (e) => {
+            // Form submissions
+            document.getElementById('loginFormElement')?.addEventListener('submit', (e) => {
                 e.preventDefault();
                 handleLogin();
             });
-        }
 
-        if (signupFormElement) {
-            signupFormElement.addEventListener('submit', (e) => {
+            document.getElementById('signupFormElement')?.addEventListener('submit', (e) => {
                 e.preventDefault();
                 handleSignup();
             });
-        }
 
-        // Signup buttons with plan data
-        document.querySelectorAll('.signup-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const plan = btn.getAttribute('data-plan');
-                if (plan) {
-                    document.getElementById('signupPlan').value = plan;
-                }
-                showSignup();
+            // Close forms when clicking overlay
+            formOverlay.addEventListener('click', closeForms);
+
+            // Plan selection buttons
+            document.querySelectorAll('.signup-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const plan = btn.getAttribute('data-plan');
+                    if (plan) {
+                        document.getElementById('signupPlan').value = plan;
+                    }
+                    showSignup();
+                });
             });
         });
-
-        // Plan selection change handler
-        const signupPlanSelect = document.getElementById('signupPlan');
-        if (signupPlanSelect) {
-            signupPlanSelect.addEventListener('change', function() {
-                const cardDetailsGroup = document.getElementById('cardDetailsGroup');
-                if (this.value === 'starter' || this.value === 'pro') {
-                    cardDetailsGroup.style.display = 'block';
-                    // Initialize Stripe Elements if not already done
-                    if (!window.cardElement) {
-                        const elements = stripe.elements();
-                        window.cardElement = elements.create('card', {
-                            style: {
-                                base: {
-                                    color: '#ffffff',
-                                    fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-                                    fontSmoothing: 'antialiased',
-                                    fontSize: '16px',
-                                    '::placeholder': {
-                                        color: '#cccccc'
-                                    }
-                                },
-                                invalid: {
-                                    color: '#ff4444',
-                                    iconColor: '#ff4444'
-                                }
-                            }
-                        });
-                        window.cardElement.mount('#card-element');
-                        
-                        window.cardElement.addEventListener('change', function(event) {
-                            const displayError = document.getElementById('cardErrors');
-                            if (event.error) {
-                                displayError.textContent = event.error.message;
-                            } else {
-                                displayError.textContent = '';
-                            }
-                        });
-                    }
-                } else {
-                    cardDetailsGroup.style.display = 'none';
-                }
-            });
-        }
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -1544,10 +1421,7 @@ eventSource.onmessage = function(event) {
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     e.preventDefault();
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
         });
