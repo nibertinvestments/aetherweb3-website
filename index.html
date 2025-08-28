@@ -670,12 +670,12 @@
                 <li><a href="index.html#features">Features</a></li>
                 <li><a href="index.html#pricing">Pricing</a></li>
                 <li><a href="#" id="dashboardBtn">Dashboard</a></li>
-                <li><a href="documentation.html">Docs</a></li>
+                <li><a href="index.html#documentation">Docs</a></li>
                 <li><a href="mailto:sales@nibertinvestments.com">Sales</a></li>
                 <li><a href="mailto:support@nibertinvestments.com">Support</a></li>
             </ul>
             <div class="auth-buttons">
-                <a href="api-management.html" class="btn btn-secondary" id="loginBtn">Login</a>
+                <a href="#" class="btn btn-secondary" id="loginBtn">Login</a>
                 <a href="register.html" class="btn btn-primary" id="signupBtn">Get Started</a>
             </div>
         </nav>
@@ -691,7 +691,7 @@
                     <p>Connect to Ethereum, Base, and Arbitrum networks with enterprise-grade reliability and lightning-fast response times.</p>
                     <div class="auth-buttons">
                         <a href="register.html" class="btn btn-primary" id="heroSignupBtn">Start Building</a>
-                        <a href="documentation.html" class="btn btn-secondary">View Documentation</a>
+                        <a href="index.html#documentation" class="btn btn-secondary">View Documentation</a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat">
@@ -803,10 +803,6 @@
                             <ul class="pricing-features">
                                 <li><i class="fas fa-check"></i> 120,000 free calls/day</li>
                                 <li><i class="fas fa-check"></i> $0.0004 per additional overage call</li>
-                                <li><i class="fas fa-check"></i> Max 25M calls/month</li>
-                                <li><i class="fas fa-check"></i> All EVM networks</li>
-                                <li><i class="fas fa-check"></i> Basic analytics</li>
-                                <li><i class="fas fa-check"></i> Email support</li>
                             </ul>
                             <a href="register.html?plan=starter" class="btn btn-primary signup-btn" data-plan="starter">Start Free Trial</a>
                             <a href="payment.html?plan=starter" class="btn btn-secondary" style="margin-top: 10px;">Upgrade Account</a>
@@ -1052,7 +1048,7 @@ eventSource.onmessage = function(event) {
             </div>
             <div class="dashboard-card">
                 <h4>Quick Start</h4>
-                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/ethereum \
+                <pre style="background: #2a2a2a; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/ethernet \
   -H "X-API-Key: YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1162,8 +1158,8 @@ eventSource.onmessage = function(event) {
     <script src="https://js.stripe.com/v3/"></script>
     
     <script>
-        // API Configuration - use production Cloud Run endpoint
-        const GATEWAY_API_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
+        // API Configuration - use production Cloud Run endpoint for GitHub Pages
+        const API_BASE_URL = 'https://multi-evm-gateway-197221342816.us-central1.run.app';
         
         // Initialize Stripe
         const stripe = Stripe('pk_live_51Rz6RyL16dRIvW3aw8RmWn30hy9G8cLQCyjmsJgKh8lkOoZBSzCaPnc8AvdiAT7uXVLVVXz6pXZ1XU9QVIdG8GtP00hX4rENeW');
@@ -1236,7 +1232,7 @@ eventSource.onmessage = function(event) {
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${GATEWAY_API_URL}/auth/login`, {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -1245,12 +1241,28 @@ eventSource.onmessage = function(event) {
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.message || 'Login failed');
+                    throw new Error(data.error || data.message || 'Login failed');
                 }
 
+                // Store authentication data matching actual backend response
                 localStorage.setItem('authToken', data.token);
-                localStorage.setItem('userData', JSON.stringify(data.user));
-                currentUser = data.user;
+                localStorage.setItem('userData', JSON.stringify({
+                    id: data.user_id,
+                    email: email,
+                    plan: data.plan,
+                    apiKey: data.api_key,
+                    todayCalls: '0',
+                    remainingCalls: '120,000'
+                }));
+                
+                currentUser = {
+                    id: data.user_id,
+                    email: email,
+                    plan: data.plan,
+                    apiKey: data.api_key,
+                    todayCalls: '0',
+                    remainingCalls: '120,000'
+                };
 
                 showFormSuccess('loginFormSuccess', 'Login successful!');
                 setTimeout(() => showDashboard(), 1000);
@@ -1283,25 +1295,58 @@ eventSource.onmessage = function(event) {
                 return;
             }
 
+            if (password.length < 6) {
+                showFormError('signupPasswordError', 'Password must be at least 6 characters');
+                return;
+            }
+
+            if (username.length < 3) {
+                showFormError('signupUsernameError', 'Username must be at least 3 characters');
+                return;
+            }
+
             submitBtn.innerHTML = '<span class="loading"></span> Creating account...';
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${GATEWAY_API_URL}/auth/register`, {
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password, plan })
+                    body: JSON.stringify({ 
+                        username,
+                        email, 
+                        password, 
+                        plan: plan
+                    })
                 });
 
                 const data = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(data.message || 'Registration failed');
+                    throw new Error(data.error || data.message || 'Registration failed');
                 }
 
+                // Store authentication data matching actual backend response
                 localStorage.setItem('authToken', data.token);
-                localStorage.setItem('userData', JSON.stringify(data.user));
-                currentUser = data.user;
+                localStorage.setItem('userData', JSON.stringify({
+                    id: data.user_id,
+                    username: username,
+                    email: email,
+                    plan: data.plan,
+                    apiKey: data.api_key,
+                    todayCalls: '0',
+                    remainingCalls: '120,000'
+                }));
+                
+                currentUser = {
+                    id: data.user_id,
+                    username: username,
+                    email: email,
+                    plan: data.plan,
+                    apiKey: data.api_key,
+                    todayCalls: '0',
+                    remainingCalls: '120,000'
+                };
 
                 showFormSuccess('signupFormSuccess', 'Account created successfully!');
                 setTimeout(() => showDashboard(), 1000);
