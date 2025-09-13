@@ -1,31 +1,46 @@
 {
   "name": "aetherweb3-website",
   "version": "1.0.0",
-  "description": "AetherWeb3 Enterprise API Key Management System",
+  "description": "Production-ready multi-blockchain gateway service providing reliable RPC access to Ethereum, Base, and Arbitrum networks",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
     "test": "jest",
-    "security-audit": "npm audit",
+    "security-audit": "npm audit --audit-level=moderate",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "echo 'Building for production...'",
-    "setup": "node setup-environment.js"
+    "setup": "node setup-environment.js",
+    "postinstall": "npm run security-audit"
   },
   "keywords": [
     "ethereum",
     "base", 
     "arbitrum",
-    "rpc",
-    "websocket",
     "blockchain",
-    "api",
-    "gateway",
-    "api-keys",
+    "rpc",
+    "api-gateway",
+    "multi-chain",
+    "web3",
+    "evm",
+    "defi",
     "enterprise",
-    "aetherweb3"
+    "api-management",
+    "cryptocurrency",
+    "smart-contracts"
   ],
-  "author": "Nibert Investments",
+  "author": {
+    "name": "Nibert Investments LLC",
+    "email": "support@nibertinvestments.com",
+    "url": "https://nibertinvestments.com"
+  },
+  "contributors": [
+    {
+      "name": "AetherWeb3 Development Team",
+      "email": "dev@nibertinvestments.com"
+    }
+  ],
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
@@ -51,7 +66,8 @@
     "nodemon": "^3.0.1",
     "jest": "^29.6.2",
     "eslint": "^8.47.0",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "@types/node": "^20.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
@@ -62,7 +78,38 @@
     "url": "git+https://github.com/nibertinvestments/aetherweb3-website.git"
   },
   "bugs": {
-    "url": "https://github.com/nibertinvestments/aetherweb3-website/issues"
+    "url": "https://github.com/nibertinvestments/aetherweb3-website/issues",
+    "email": "support@nibertinvestments.com"
   },
-  "homepage": "https://aetherweb3.xyz"
+  "homepage": "https://nibertinvestments.github.io/aetherweb3-website/",
+  "funding": {
+    "type": "individual",
+    "url": "https://nibertinvestments.com"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/coverage/**"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es2021": true
+    },
+    "extends": [
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 12,
+      "sourceType": "module"
+    }
+  }
 }
