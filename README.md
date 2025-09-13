@@ -1,45 +1,70 @@
-# 🚀 AetherWeb3 - Multi-EVM Gateway
+# AetherWeb3 - Multi-EVM Gateway
 
-## Live Service Status: 🟢 OPERATIONAL
+[![Live Status](https://img.shields.io/badge/status-operational-brightgreen)](https://nibertinvestments.github.io/aetherweb3-website/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 
-**🌐 Website**: [https://nibertinvestments.github.io/aetherweb3-website/](https://nibertinvestments.github.io/aetherweb3-website/)  
-**🔗 API Gateway**: [https://multi-evm-gateway-197221342816.us-central1.run.app](https://multi-evm-gateway-197221342816.us-central1.run.app)  
-**📊 Documentation**: [Interactive API Docs](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
+A production-ready multi-blockchain gateway service providing reliable RPC access to Ethereum, Base, and Arbitrum networks.
 
----
+## Table of Contents
 
-## 📋 Overview
+- [Overview](#overview)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Documentation](#api-documentation)
+- [Configuration](#configuration)
+- [Development](#development)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [Security](#security)
+- [Support](#support)
+- [License](#license)
 
-AetherWeb3 is a high-performance multi-blockchain gateway service providing enterprise-grade RPC access to **Ethereum**, **Base**, and **Arbitrum** networks. Built for developers who demand reliability, speed, and scale.
+## Overview
 
-### 🎯 Key Features
-- ✅ **3 EVM Networks**: Ethereum, Base, Arbitrum
-- ✅ **Sub-100ms Response Times**: Optimized infrastructure
-- ✅ **99.9% Uptime SLA**: Enterprise reliability
-- ✅ **Free Tier**: 120,000 calls/day at no cost
-- ✅ **Interactive Testing**: Live API testing in browser
-- ✅ **Real-time Registration**: Instant API key generation
+AetherWeb3 provides a unified interface for interacting with multiple EVM-compatible blockchain networks. The service offers authenticated RPC access with built-in rate limiting, monitoring, and enterprise-grade reliability features.
 
----
+### Live Service Information
 
-## 🌐 Supported Networks
+- **Website**: [https://nibertinvestments.github.io/aetherweb3-website/](https://nibertinvestments.github.io/aetherweb3-website/)
+- **API Gateway**: [https://multi-evm-gateway-197221342816.us-central1.run.app](https://multi-evm-gateway-197221342816.us-central1.run.app)
+- **Documentation**: [Interactive API Docs](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
+
+## Features
+
+### Core Capabilities
+- **Multi-Network Support**: Ethereum, Base, and Arbitrum networks
+- **High Performance**: Sub-100ms average response times
+- **Enterprise Reliability**: 99.9% uptime SLA
+- **Flexible Pricing**: Free tier with 120,000 daily calls
+- **Developer Tools**: Interactive API testing and comprehensive documentation
+- **Instant Setup**: Real-time API key generation
+
+### Supported Networks
 
 | Network | Chain ID | Endpoint | Status |
 |---------|----------|----------|---------|
-| **Ethereum** | 1 | `/ethereum` | 🟢 Live |
-| **Base** | 8453 | `/base` | 🟢 Live |
-| **Arbitrum** | 42161 | `/arbitrum` | 🟢 Live |
+| Ethereum | 1 | `/ethereum` | Operational |
+| Base | 8453 | `/base` | Operational |
+| Arbitrum | 42161 | `/arbitrum` | Operational |
 
----
+## Quick Start
 
-## ⚡ Quick Start
+### Prerequisites
 
-### 1. Get Your API Key (Free)
-Visit [AetherWeb3.xyz](https://nibertinvestments.github.io/aetherweb3-website/) and sign up instantly - no credit card required.
+- Node.js 18.0.0 or higher
+- npm 8.0.0 or higher
 
-### 2. Make Your First Call
+### Get API Access
 
-#### Ethereum Balance Check
+1. Visit [AetherWeb3](https://nibertinvestments.github.io/aetherweb3-website/) to register
+2. Choose your plan (free tier available)
+3. Get your API key instantly
+
+### Make Your First Request
+
 ```bash
 curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/ethereum \
   -H "X-API-Key: YOUR_API_KEY" \
@@ -52,7 +77,7 @@ curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/ethereum
   }'
 ```
 
-#### Response
+Expected response:
 ```json
 {
   "jsonrpc": "2.0",
@@ -61,99 +86,55 @@ curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/ethereum
 }
 ```
 
-### 3. Test Other Networks
-```bash
-# Base Network
-curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/base \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+## Installation
 
-# Arbitrum Network  
-curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/arbitrum \
-  -H "X-API-Key: YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+### For Development
+
+```bash
+# Clone the repository
+git clone https://github.com/nibertinvestments/aetherweb3-website.git
+cd aetherweb3-website
+
+# Install dependencies
+npm install
+
+# Copy environment configuration
+cp .env.example .env
+
+# Configure your environment variables
+# Edit .env with your specific values
+
+# Start development server
+npm run dev
 ```
 
----
+### For Production
 
-## 💰 Pricing (Live Rates)
-
-### 🆓 Free Tier
-- **Cost**: $0/month
-- **Calls**: 120,000/day (resets daily)
-- **Rate Limit**: 20 calls/minute
-- **Perfect for**: Development, testing, small projects
-
-### 🚀 Starter Plan
-- **Cost**: $9.99/month
-- **Free Calls**: 120,000/day
-- **Overage**: $0.0004 per call
-- **Rate Limit**: 60 calls/minute
-- **Perfect for**: Growing applications
-
-### 💎 Pro Plan
-- **Cost**: $29.99/month  
-- **Free Calls**: 120,000/day
-- **Overage**: $0.0001 per call
-- **Rate Limit**: 200 calls/minute
-- **Perfect for**: Production applications
-
-### 🏢 Enterprise
-- **Custom Pricing**: Contact sales
-- **Dedicated Infrastructure**: Private nodes
-- **SLA**: 99.99% uptime guarantee
-- **Perfect for**: Large-scale applications
-
----
-
-## 🧪 Interactive Testing
-
-### Live API Testing
-Test our API directly from your browser:  
-👉 [Interactive Documentation](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
-
-Features:
-- ✅ **Live Balance Checks**: Test any Ethereum address
-- ✅ **Network Status**: Real-time service monitoring  
-- ✅ **Registration Testing**: Try the signup process
-- ✅ **Copy-Paste Examples**: All code ready to use
-
-### Example Test Results
 ```bash
-# Real test performed at 2025-08-27 20:26:05 UTC
-curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "test_user_1724780765",
-    "email": "test1724780765@example.com", 
-    "password": "SecureTest123!",
-    "plan": "free"
-  }'
+# Install production dependencies
+npm ci --only=production
 
-# Response (HTTP 201 - 89ms):
-{
-  "message": "User registered successfully",
-  "apiKey": "ak_49292c3ced0770ea716d1df08d63a678dedc2baedba806c578ca535003d1af9d",
-  "user": {
-    "id": "user_1724780765",
-    "email": "test1724780765@example.com",
-    "plan": "free"
-  }
-}
+# Build the application
+npm run build
+
+# Start the production server
+npm start
 ```
 
----
+## Usage
 
-## 🔐 Authentication
+### Authentication
 
-### API Key Header
+All API requests require authentication using the `X-API-Key` header:
+
 ```bash
 X-API-Key: YOUR_API_KEY
 ```
 
-### Registration Endpoint
+### Registration
+
+Create a new account and get your API key:
+
 ```bash
 curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/auth/register \
   -H "Content-Type: application/json" \
@@ -165,7 +146,10 @@ curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/auth/reg
   }'
 ```
 
-### Login Endpoint
+### Login
+
+Authenticate with existing credentials:
+
 ```bash
 curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/auth/login \
   -H "Content-Type: application/json" \
@@ -175,63 +159,64 @@ curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/auth/log
   }'
 ```
 
----
+### Making RPC Calls
 
-## 📊 Performance Metrics
+The service supports standard JSON-RPC 2.0 format for all networks:
 
-### Current Infrastructure
-- **🏃 Response Time**: Sub-100ms average
-- **📈 Capacity**: 5,400+ requests/minute  
-- **🌍 Coverage**: US multi-region deployment
-- **⚡ Throughput**: ~1,800 RPS per network
-- **🛡️ Uptime**: 99.9% SLA
-
-### Live Performance Test
 ```bash
-# Example response times (tested 2025-08-27):
-Ethereum:  89ms ✅
-Base:      76ms ✅  
-Arbitrum:  92ms ✅
+# Get latest block number
+curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/ethereum \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}'
+
+# Get account balance
+curl -X POST https://multi-evm-gateway-197221342816.us-central1.run.app/base \
+  -H "X-API-Key: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "eth_getBalance",
+    "params": ["0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5", "latest"],
+    "id": 1
+  }'
 ```
 
----
+## API Documentation
 
-## 🛠️ Common Use Cases
+### Interactive Documentation
 
-### DeFi Applications
-```javascript
-// Check token balances across all networks
-const networks = ['ethereum', 'base', 'arbitrum'];
-for (const network of networks) {
-  const balance = await checkBalance(tokenAddress, network);
-}
-```
+Test the API directly in your browser: [Interactive API Docs](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
 
-### NFT Marketplaces  
-```javascript
-// Verify NFT ownership across chains
-const ownership = await verifyNFTOwnership(nftContract, tokenId, 'ethereum');
-```
+### Supported RPC Methods
 
-### Cross-Chain Analytics
-```javascript
-// Monitor transactions across all supported chains
-const txData = await getTransactionData(txHash, 'arbitrum');
-```
+The gateway supports standard Ethereum JSON-RPC methods:
 
-### Trading Bots
-```javascript
-// High-frequency price monitoring
-setInterval(async () => {
-  const price = await getTokenPrice(tokenContract, 'base');
-}, 1000); // 1 second intervals
-```
+#### Account Information
+- `eth_getBalance` - Get account balance
+- `eth_getTransactionCount` - Get account nonce
+- `eth_getCode` - Get contract code
 
----
+#### Block Information  
+- `eth_blockNumber` - Get latest block number
+- `eth_getBlockByNumber` - Get block by number
+- `eth_getBlockByHash` - Get block by hash
 
-## 📚 Integration Examples
+#### Transaction Operations
+- `eth_getTransactionByHash` - Get transaction details
+- `eth_sendRawTransaction` - Submit signed transaction
+- `eth_getTransactionReceipt` - Get transaction receipt
+- `eth_estimateGas` - Estimate gas usage
+- `eth_gasPrice` - Get current gas price
 
-### Web3.js Integration
+#### Network Information
+- `eth_chainId` - Get chain ID
+- `net_version` - Get network version
+- `web3_clientVersion` - Get client version
+
+### Integration Examples
+
+#### Web3.js
 ```javascript
 const Web3 = require('web3');
 
@@ -244,11 +229,10 @@ const web3 = new Web3(new Web3.providers.HttpProvider(
   }
 ));
 
-// Use normally
 const balance = await web3.eth.getBalance('0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5');
 ```
 
-### Ethers.js Integration
+#### Ethers.js
 ```javascript
 const { ethers } = require('ethers');
 
@@ -262,7 +246,7 @@ const provider = new ethers.providers.JsonRpcProvider({
 const balance = await provider.getBalance('0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5');
 ```
 
-### Python Integration
+#### Python
 ```python
 import requests
 
@@ -282,180 +266,247 @@ def make_rpc_call(network, method, params):
     response = requests.post(url, json=data, headers=headers)
     return response.json()
 
-# Get balance
+# Example usage
 balance = make_rpc_call('ethereum', 'eth_getBalance', 
                        ['0x742d35cc6634c0532925a3b8d3ac74e4dc3c8ef5', 'latest'])
 ```
 
----
+## Configuration
 
-## 🔍 Common RPC Methods
+### Environment Variables
 
-### Account Information
-```bash
-# Get Balance
-{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xADDRESS","latest"],"id":1}
+Create a `.env` file in the project root (copy from `.env.example`):
 
-# Get Transaction Count  
-{"jsonrpc":"2.0","method":"eth_getTransactionCount","params":["0xADDRESS","latest"],"id":1}
+```env
+# Google Cloud Configuration
+PROJECT_ID=your-project-id
+GOOGLE_CLOUD_PROJECT=your-project-id
 
-# Get Code
-{"jsonrpc":"2.0","method":"eth_getCode","params":["0xADDRESS","latest"],"id":1}
+# Node RPC Endpoints (internal IPs)
+ETH_NODE_IP=10.128.0.6
+BASE_NODE_IP=10.142.0.2
+ARBITRUM_NODE_IP=10.138.0.2
+
+# Stripe API Configuration
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_PUBLISHABLE_KEY=pk_live_...
+
+# Network Configuration
+VPC_NETWORK=evm-vpc
+VPC_CONNECTOR=evm-connector
+
+# Security Settings
+JWT_SECRET=your-jwt-secret
+BCRYPT_ROUNDS=12
 ```
 
-### Block Information
-```bash
-# Latest Block Number
-{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}
+### Rate Limits
 
-# Get Block by Number
-{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",true],"id":1}
+| Plan | Requests/Minute | Daily Limit | Cost |
+|------|-----------------|-------------|------|
+| Free | 20 | 120,000 | $0 |
+| Starter | 60 | 120,000 + overage | $9.99/month |
+| Pro | 200 | 120,000 + overage | $29.99/month |
+| Enterprise | Custom | Custom | Contact sales |
 
-# Get Block by Hash  
-{"jsonrpc":"2.0","method":"eth_getBlockByHash","params":["0xHASH",true],"id":1}
+### Pricing
+
+- **Free Tier**: 120,000 calls/day at no cost
+- **Overage Rates**: 
+  - Starter: $0.0004 per call
+  - Pro: $0.0001 per call
+- **Enterprise**: Custom pricing available
+
+## Development
+
+### Local Setup
+
+1. **Clone and Install**:
+   ```bash
+   git clone https://github.com/nibertinvestments/aetherweb3-website.git
+   cd aetherweb3-website
+   npm install
+   ```
+
+2. **Configure Environment**:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+3. **Start Development Server**:
+   ```bash
+   npm run dev
+   ```
+
+### Available Scripts
+
+- `npm start` - Start production server
+- `npm run dev` - Start development server with hot reload
+- `npm test` - Run test suite
+- `npm run lint` - Run code linter
+- `npm run security-audit` - Run security audit
+- `npm run build` - Build for production
+
+### Project Structure
+
+```
+aetherweb3-website/
+├── gateway/                 # Gateway application
+│   ├── app.js              # Main gateway server
+│   └── SECURITY-README.md  # Security guidelines
+├── lib/                    # Shared libraries
+│   └── apiKeyManager.js    # API key management
+├── middleware/             # Express middleware
+│   └── auth.js            # Authentication middleware
+├── routes/                 # API routes
+│   └── apiKeys.js         # API key routes
+├── multi-evm-gateway/     # Multi-EVM gateway service
+├── docs/                  # Documentation (see docs/ folder)
+├── index.html             # Frontend website
+├── documentation.html     # API documentation
+└── package.json           # Project configuration
 ```
 
-### Transactions
+### Testing
+
+The project uses Jest for testing. Run tests with:
+
 ```bash
-# Get Transaction
-{"jsonrpc":"2.0","method":"eth_getTransactionByHash","params":["0xHASH"],"id":1}
-
-# Send Transaction
-{"jsonrpc":"2.0","method":"eth_sendRawTransaction","params":["0xSIGNED_TX"],"id":1}
-
-# Get Receipt
-{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params":["0xHASH"],"id":1}
+npm test
 ```
 
----
+Create new tests in the `__tests__` directory following the existing patterns.
 
-## 💡 Cost Calculator
+## Deployment
 
-### Estimate Your Monthly Costs
+### Production Deployment
 
-#### Small App (150K calls/day)
-- **Free**: 120,000 calls
-- **Paid**: 30,000 calls  
-- **Starter**: $9.99 + (30K × $0.0004) = **$21.99/day**
-- **Monthly**: **~$660**
+1. **Prepare Environment**:
+   ```bash
+   # Set production environment variables
+   export NODE_ENV=production
+   export PORT=8080
+   ```
 
-#### Medium App (300K calls/day)  
-- **Free**: 120,000 calls
-- **Paid**: 180,000 calls
-- **Pro**: $29.99 + (180K × $0.0001) = **$47.99/day**  
-- **Monthly**: **~$1,440**
+2. **Build and Deploy**:
+   ```bash
+   npm ci --only=production
+   npm run build
+   npm start
+   ```
 
-#### Large App (500K calls/day)
-- **Free**: 120,000 calls  
-- **Paid**: 380,000 calls
-- **Pro**: $29.99 + (380K × $0.0001) = **$67.99/day**
-- **Monthly**: **~$2,040**
+### Docker Deployment
 
----
+```bash
+# Build image
+docker build -t aetherweb3-gateway .
 
-## 🛡️ Security & Compliance
+# Run container
+docker run -p 8080:8080 \
+  -e NODE_ENV=production \
+  -e PROJECT_ID=your-project-id \
+  aetherweb3-gateway
+```
 
-### Infrastructure Security
-- ✅ **SSL/TLS Encryption**: All traffic encrypted
-- ✅ **DDoS Protection**: Advanced filtering
-- ✅ **Rate Limiting**: Per-user limits
-- ✅ **API Key Rotation**: Secure key management
-- ✅ **SOC 2 Compliance**: Enterprise standards
+### Cloud Run Deployment
 
-### Data Protection  
-- ✅ **No Data Storage**: We don't store blockchain data
-- ✅ **Firestore Database**: Google Cloud managed
-- ✅ **bcrypt Passwords**: Secure hashing
-- ✅ **JWT Tokens**: Stateless authentication
+```bash
+# Deploy to Google Cloud Run
+gcloud run deploy multi-evm-gateway \
+  --image gcr.io/your-project/gateway:latest \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated
+```
 
----
+## Contributing
 
-## 📞 Support & Contact
+We welcome contributions to AetherWeb3! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to get started.
 
-### 🔧 Technical Support
-- **Email**: [support@nibertinvestments.com](mailto:support@nibertinvestments.com)
-- **Response Time**: < 24 hours
-- **Hours**: 24/7 for critical issues
+### Development Process
 
-### 💼 Sales & Enterprise  
-- **Email**: [sales@nibertinvestments.com](mailto:sales@nibertinvestments.com)
-- **Enterprise Solutions**: Custom infrastructure
-- **White-label**: Private deployment options
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass (`npm test`)
+6. Run linting (`npm run lint`)
+7. Commit your changes (`git commit -m 'Add amazing feature'`)
+8. Push to the branch (`git push origin feature/amazing-feature`)
+9. Open a Pull Request
 
-### 🐛 Bug Reports
-- **GitHub Issues**: [Report bugs here](https://github.com/nibertinvestments/aetherweb3-website/issues)
-- **Feature Requests**: Community-driven development
+### Code Style
 
----
+- Follow existing code patterns and conventions
+- Use meaningful variable and function names
+- Add comments for complex logic
+- Ensure proper error handling
+- Write tests for new features
 
-## 🚀 Roadmap
+## Security
 
-### 🎯 Q1 2025
-- [ ] **Polygon Support**: Add MATIC network
-- [ ] **Optimism Support**: Add OP mainnet  
-- [ ] **WebSocket Streaming**: Real-time event subscriptions
-- [ ] **GraphQL Endpoints**: Alternative query interface
+Security is a top priority for AetherWeb3. Please see our [Security Policy](SECURITY.md) for details on:
 
-### 🎯 Q2 2025
-- [ ] **Mobile SDKs**: iOS and Android libraries
-- [ ] **Batch Optimization**: Multi-call efficiency
-- [ ] **Regional Expansion**: EU and Asia deployment
-- [ ] **Advanced Analytics**: Enhanced dashboard
+- Reporting security vulnerabilities
+- Security best practices
+- Supported versions
 
----
+### Security Features
 
-## 📊 Real-Time Monitoring
+- **SSL/TLS Encryption**: All traffic encrypted end-to-end
+- **API Key Authentication**: Secure access control
+- **Rate Limiting**: Protection against abuse
+- **Input Validation**: Sanitized request processing
+- **Security Headers**: OWASP recommended headers
+- **Regular Audits**: Continuous security monitoring
 
-### Service Status
-Check live service status: [Status Page](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
+For security concerns, please email [security@nibertinvestments.com](mailto:security@nibertinvestments.com).
 
-### Performance Metrics
-- **Uptime**: 99.9% (last 30 days)
-- **Avg Response**: 89ms (last 24h)  
-- **Total Requests**: 1M+ served
-- **Success Rate**: 99.8%
+## Support
 
----
+### Community Support
 
-## 📄 License & Terms
+- **Documentation**: [Interactive API Docs](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
+- **Issues**: [GitHub Issues](https://github.com/nibertinvestments/aetherweb3-website/issues)
+- **Feature Requests**: Submit via GitHub Issues
+
+### Commercial Support
+
+- **Technical Support**: [support@nibertinvestments.com](mailto:support@nibertinvestments.com)
+- **Sales & Enterprise**: [sales@nibertinvestments.com](mailto:sales@nibertinvestments.com)
+- **Response Time**: < 24 hours for technical issues
+
+### Status & Monitoring
+
+- **Service Status**: [Status Page](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)
+- **Performance Metrics**: Sub-100ms average response time
+- **Uptime**: 99.9% SLA (last 30 days)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Commercial Use
+
+- ✅ Commercial use permitted
+- ✅ Private use permitted  
+- ✅ Modification permitted
+- ✅ Distribution permitted
 
 **Copyright © 2025 Nibert Investments LLC**
 
-- ✅ **Free Tier**: No restrictions, commercial use allowed
-- ✅ **Paid Plans**: Enterprise licensing available  
-- ✅ **Open Source**: This website repository is public
-- ✅ **API Terms**: Fair use policy applies
+---
+
+## Roadmap
+
+### Upcoming Features
+
+- **Q1 2025**: Polygon and Optimism network support
+- **Q2 2025**: WebSocket streaming and mobile SDKs
+- **Q3 2025**: GraphQL endpoints and advanced analytics
+- **Q4 2025**: Regional expansion and enhanced monitoring
 
 ---
 
-## 🌟 Why Choose AetherWeb3?
-
-### ⚡ **Speed**
-Sub-100ms response times with optimized infrastructure
-
-### 🛡️ **Reliability**  
-99.9% uptime SLA with enterprise-grade infrastructure
-
-### 💰 **Cost-Effective**
-120,000 free calls daily - perfect for development and small projects
-
-### 🔧 **Developer-Friendly**
-Interactive testing, comprehensive docs, and instant API keys
-
-### 🌐 **Multi-Chain**
-One service, three major EVM networks
-
-### 📈 **Scalable**
-From free tier to enterprise - grow with us
-
----
-
-**🚀 Ready to get started?**
-
-👉 **[Sign Up Free](https://nibertinvestments.github.io/aetherweb3-website/)** - Get your API key in seconds  
-👉 **[Test Live API](https://nibertinvestments.github.io/aetherweb3-website/documentation.html)** - Try before you commit  
-👉 **[Contact Sales](mailto:sales@nibertinvestments.com)** - Enterprise solutions available
-
----
-
-*Built with ❤️ by [Nibert Investments LLC](mailto:sales@nibertinvestments.com)*
+*Built with ❤️ by [Nibert Investments LLC](https://nibertinvestments.com)*
