@@ -1,34 +1,38 @@
-# Multi-EVM Gateway - Enterprise Security Edition
+# Multi-EVM Gateway - Enterprise Edition
 
-🔒 **Production-ready, enterprise-grade gateway for Ethereum, Base, and Arbitrum networks with comprehensive security features.**
+Production-ready, enterprise-grade gateway for Ethereum, Base, and Arbitrum networks with comprehensive security features.
 
-## 🚀 Features
+## Overview
 
-### Blockchain Networks
+The Multi-EVM Gateway provides a unified interface for interacting with multiple EVM-compatible blockchain networks. It offers authenticated RPC access with built-in rate limiting, monitoring, and enterprise-grade security features.
+
+## Features
+
+### Supported Networks
 - **Ethereum Mainnet** - Full RPC and WebSocket support
-- **Base Network** - Coinbase's L2 solution
+- **Base Network** - Coinbase's L2 solution  
 - **Arbitrum One** - High-performance L2 scaling
 
 ### Security Features
-- ✅ **API Key Authentication** via Stripe integration
-- ✅ **Rate Limiting** with tier-based quotas
-- ✅ **Request Validation** with method whitelisting
-- ✅ **DDoS Protection** via Cloudflare Security
-- ✅ **SSL/TLS Encryption** end-to-end
-- ✅ **Container Security** with vulnerability scanning
-- ✅ **VPC Network Isolation** for backend nodes
-- ✅ **Security Headers** (Helmet.js integration)
-- ✅ **Input Sanitization** and size limits
-- ✅ **Audit Logging** for all requests
+- API Key Authentication via Stripe integration
+- Rate Limiting with tier-based quotas
+- Request Validation with method whitelisting
+- DDoS Protection via Cloudflare Security
+- SSL/TLS Encryption end-to-end
+- Container Security with vulnerability scanning
+- VPC Network Isolation for backend nodes
+- Security Headers (Helmet.js integration)
+- Input Sanitization and size limits
+- Audit Logging for all requests
 
 ### Monitoring & Analytics
-- 📊 **Real-time Usage Tracking**
-- 📈 **Cost Analytics** with Stripe billing
-- 🔍 **WebSocket Connection Monitoring**
-- 🚨 **Security Event Alerting**
-- 📋 **Comprehensive Logging**
+- Real-time Usage Tracking
+- Cost Analytics with Stripe billing
+- WebSocket Connection Monitoring
+- Security Event Alerting
+- Comprehensive Logging
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 Internet → Cloudflare DDoS → Load Balancer → Cloud Run Gateway → VPC → Blockchain Nodes
@@ -38,7 +42,7 @@ Internet → Cloudflare DDoS → Load Balancer → Cloud Run Gateway → VPC →
                                            Limiting         Only
 ```
 
-## 🔐 API Authentication
+## API Authentication
 
 ### HTTP API Endpoints
 ```bash
@@ -59,7 +63,7 @@ const ws = new WebSocket('wss://your-gateway-url/ws/v1/ethereum', {
 });
 ```
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### RPC Endpoints
 | Network | Endpoint | Description |
@@ -83,7 +87,7 @@ const ws = new WebSocket('wss://your-gateway-url/ws/v1/ethereum', {
 | `/api/v1/usage/{customerId}` | Usage analytics | Yes |
 | `/api/v1/ws/connections` | Active WebSocket connections | Yes |
 
-## ⚡️ Security Specifications
+## Security Specifications
 
 ### Rate Limiting
 | Tier | Requests/Minute | WebSocket Connections |
@@ -113,7 +117,7 @@ Content-Security-Policy: default-src 'self'
 Strict-Transport-Security: max-age=31536000; includeSubDomains
 ```
 
-## 💰 Billing Integration
+## Billing Integration
 
 ### Stripe Integration
 - **Customer Management** via Stripe Customer API
@@ -126,7 +130,7 @@ Strict-Transport-Security: max-age=31536000; includeSubDomains
 - **Minimum Charge**: $0.001 per request
 - **WebSocket**: Included in subscription tier
 
-## 🚀 Deployment
+## Deployment
 
 ### Prerequisites
 ```bash
@@ -164,17 +168,18 @@ VPC_CONNECTOR=evm-connector
 ./scripts/deploy-secure-gateway.ps1
 ```
 
-## 📊 Monitoring & Alerting
+## Monitoring & Alerting
 
 ### Health Monitoring
 ```bash
 # Check service health
 curl https://your-gateway-url/health
 
-# Response
+Response:
+```json
 {
   "status": "healthy",
-  "timestamp": "2025-08-23T20:00:00.000Z",
+  "timestamp": "2025-01-13T20:00:00.000Z",
   "version": "1.0.0",
   "services": {
     "stripe": true,
@@ -194,7 +199,8 @@ curl https://your-gateway-url/health
 curl -H "x-api-key: your_key" \
      https://your-gateway-url/api/v1/usage/customer_id
 
-# Response
+Response:
+```json
 {
   "summary": {
     "totalRequests": 1250,
@@ -206,11 +212,11 @@ curl -H "x-api-key: your_key" \
     }
   },
   "recent": [...],
-  "timestamp": "2025-08-23T20:00:00.000Z"
+  "timestamp": "2025-01-13T20:00:00.000Z"
 }
 ```
 
-## 🛠 Development
+## Development
 
 ### Local Development
 ```bash
@@ -251,7 +257,7 @@ ws.send(JSON.stringify({
 }));
 ```
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -271,18 +277,18 @@ ws.send(JSON.stringify({
 - Verify subscription includes WebSocket access
 
 ### Support Channels
-- 📧 Email: support@yourdomain.com
-- 📚 Documentation: https://docs.yourdomain.com
-- 🐛 Issues: https://github.com/yourusername/multi-evm-gateway/issues
+- **Email**: support@nibertinvestments.com
+- **Documentation**: See main project README.md
+- **Issues**: https://github.com/nibertinvestments/aetherweb3-website/issues
 
-## 📄 License
+## License
 
 MIT License - see LICENSE file for details.
 
-## 🔒 Security
+## Security
 
-For security concerns, please email security@yourdomain.com
+For security concerns, please email security@nibertinvestments.com
 
 ---
 
-**Built with ❤️ for the Ethereum ecosystem**
+**Built for the Ethereum ecosystem**
